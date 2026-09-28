@@ -1,8 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../actions/Button.jsx';
 import { Icon } from '../icons/Icon.jsx';
 import { Tag } from '../display/Tag.jsx';
+import { Badge } from '../display/Badge.jsx';
 import { Tabs } from '../navigation/Tabs.jsx';
 import { Reveal } from '../shared/Reveal.jsx';
 import { whatsappHref } from '../../lib/whatsapp.js';
@@ -123,53 +124,268 @@ export function Process() {
   );
 }
 
-function WorkCard({ name, tag, desc, href, delay }) {
+function Bullets({ label, items, icon, color }) {
+  return (
+    <div>
+      <div className="eyebrow" style={{ marginBottom: 12 }}>{label}</div>
+      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {items.map((it) => (
+          <li key={it} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, lineHeight: 1.5, color: 'var(--text-2)' }}>
+            <span style={{ color, marginTop: 3 }}><Icon name={icon} size={14} /></span>
+            {it}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Preview({ p, onFail }) {
+  const ref = useRef(null);
+  const host = new URL(p.previewUrl).host;
+  useEffect(() => {
+    const im = ref.current;
+    if (im && im.complete && im.naturalWidth === 0) onFail();
+  }, [onFail]);
+  return (
+    <a href={p.previewUrl} target="_blank" rel="noopener" aria-label={'Abrir ' + host} className="work-preview" style={{ display: 'block', border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'var(--bg)', textDecoration: 'none' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
+        <span style={{ display: 'flex', gap: 6 }}>
+          {[0, 1, 2].map((i) => <span key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--border-strong)' }} />)}
+        </span>
+        <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', font: '500 11px/1 var(--font-mono)', color: 'var(--text-3)', background: 'var(--bg)', borderRadius: 'var(--radius-sm)', padding: '6px 10px' }}>{host}</span>
+        <span style={{ color: 'var(--text-3)' }}><Icon name="arrow-up-right" size={14} /></span>
+      </div>
+      <div style={{ aspectRatio: '16 / 10', overflow: 'hidden' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img ref={ref} src={p.image} alt={'Captura de ' + host} loading="lazy" onError={onFail} className="work-preview__img" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+      </div>
+    </a>
+  );
+}
+
+function WorkCard({ p, wide = false, delay }) {
+  const big = p.featured;
+  const [failed, setFailed] = useState(false);
+  const [open, setOpen] = useState(false);
+  const preview = failed ? null : <Preview p={p} onFail={() => setFailed(true)} />;
+  const summary = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+        <Badge status={p.badgeStatus}>{p.badge}</Badge>
+        <Tag>{p.tag}</Tag>
+      </div>
+      <h3 className={big ? 'h2' : undefined} style={big ? undefined : { font: 'var(--text-h3)', letterSpacing: 'var(--ls-h3)' }}>{p.title}</h3>
+      <p style={{ fontSize: big ? 16 : 14, color: 'var(--text-2)', lineHeight: 1.55 }}>{p.problem}</p>
+    </div>
+  );
+  const listsInner = (
+    <div className={wide ? 'stack-sm' : undefined} style={wide ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(24px,5vw,56px)', paddingTop: 32, borderTop: '1px solid var(--border)' } : { display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <Bullets label={p.builtLabel} items={p.built} icon="check" color="var(--accent)" />
+      <Bullets label="Se puede sumar" items={p.extra} icon="plus" color="var(--text-3)" />
+    </div>
+  );
+  const lists = (
+    <div>
+      <button type="button" className="work-toggle" onClick={() => setOpen(!open)} aria-expanded={open} data-open={open}>
+        {open ? 'Ocultar detalle' : 'Ver qué incluye'}
+        <Icon name="chevron-down" size={16} />
+      </button>
+      <div className="work-collapse" data-open={open}>
+        <div style={{ minHeight: 0, overflow: 'hidden' }}>
+          <div style={{ paddingTop: 20 }}>{listsInner}</div>
+        </div>
+      </div>
+    </div>
+  );
+  const actions = (
+    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+      <Button size={big ? 'lg' : 'md'} iconRight="arrow-right" href={whatsappHref(p.message)} target="_blank" rel="noopener">{p.cta}</Button>
+      {p.links.map((l) => (
+        <Button key={l.href} variant="secondary" size={big ? 'lg' : 'sm'} iconRight="arrow-up-right" href={l.href} target="_blank" rel="noopener">{l.label}</Button>
+      ))}
+    </div>
+  );
   return (
     <Reveal
-      as="a"
-      href={href}
-      target="_blank"
-      rel="noopener"
       delay={delay}
-      className="hover-card center-sm"
-      style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: 24, display: 'flex', flexDirection: 'column', gap: 14, background: 'var(--surface-1)', textDecoration: 'none', color: 'inherit' }}
+      style={{ border: '1px solid ' + (big ? 'var(--accent)' : 'var(--border)'), borderRadius: 'var(--radius-lg)', padding: big ? 'clamp(24px,4vw,40px)' : 24, background: 'var(--surface-1)' }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-        <Tag>{tag}</Tag>
-        <span style={{ color: 'var(--text-3)' }}><Icon name="arrow-up-right" size={16} /></span>
-      </div>
-      <div>
-        <div style={{ font: 'var(--text-h4)' }}>{name}</div>
-        <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.55, marginTop: 6 }}>{desc}</p>
-      </div>
+      {wide ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div className="stack-sm" style={{ display: 'grid', gridTemplateColumns: preview ? '1fr 1.15fr' : '1fr', gap: 'clamp(32px,5vw,56px)', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+              {summary}
+              {actions}
+            </div>
+            {preview}
+          </div>
+          {lists}
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, height: '100%' }}>
+          {preview}
+          {summary}
+          {lists}
+          <div style={{ marginTop: 'auto' }}>{actions}</div>
+        </div>
+      )}
     </Reveal>
   );
 }
 
+const WORK_CLIENTS = [
+  {
+    featured: true,
+    badge: 'Producto propio',
+    badgeStatus: 'accent',
+    tag: 'Concesionarias',
+    image: '/works/goconcesionaria.png',
+    previewUrl: 'https://goconcesionaria.godreamai.com/',
+    title: 'CRM de ventas, leads y stock con WhatsApp',
+    problem: 'Las consultas entran por WhatsApp, se reparten a mano entre vendedores y nadie sabe qué lead está caliente ni qué unidades hay disponibles.',
+    builtLabel: 'Construido',
+    built: [
+      'Bot de WhatsApp que atiende y registra consultas',
+      'Clasificación automática de leads',
+      'Pipeline de ventas',
+      'Gestión de stock y vehículos',
+      'Carga manual sin pasar por el bot',
+      'Varias concesionarias en un mismo sistema',
+    ],
+    extra: [
+      'Recordatorios de seguimiento a vendedores',
+      'Reportes por vendedor y por origen del lead',
+      'Integración con portales de publicación',
+    ],
+    cta: 'Quiero esto para mi concesionaria',
+    message: 'Hola, quiero un sistema como GoConcesionaria para mi concesionaria.',
+    links: [{ label: 'Ver cómo funciona', href: 'https://goconcesionaria.godreamai.com/' }],
+  },
+  {
+    badge: 'Cliente real',
+    badgeStatus: 'success',
+    tag: 'Productos a medida (CNC)',
+    image: '/works/liever.png',
+    previewUrl: 'https://liever.godreamai.com/',
+    title: 'Tienda online con pedidos a WhatsApp y panel de gestión',
+    problem: 'Vender productos a medida por mensaje, sin catálogo actualizado ni registro de qué pedidos se confirmaron.',
+    builtLabel: 'Construido',
+    built: [
+      'Catálogo y carrito',
+      'Pedido enviado a WhatsApp con los datos del cliente',
+      'Panel para cargar productos y ver pedidos',
+      'Confirmación de pedidos desde el panel',
+      'Respuestas prearmadas para WhatsApp',
+      'Tabla de envíos editable',
+    ],
+    extra: [
+      'Chatbot de atención para consultas frecuentes',
+      'Pagos online',
+      'Avisos automáticos de estado del pedido',
+      'Estadísticas de ventas',
+    ],
+    cta: 'Quiero ordenar mis pedidos así',
+    message: 'Hola, quiero una tienda con pedidos y panel de gestión como la de Liever.',
+    links: [{ label: 'Ver la tienda', href: 'https://liever.godreamai.com/' }],
+  },
+];
+
+const WORK_DEMOS = [
+  {
+    badge: 'Demo conceptual',
+    badgeStatus: 'neutral',
+    tag: 'Gastronomía',
+    image: '/works/gastronomia.png',
+    previewUrl: 'https://panchodoto.godreamai.com/',
+    title: 'Menú digital y pedidos automatizados para gastronomía',
+    problem: 'Menús en PDF o fotos sueltas, pedidos que se anotan a mano por WhatsApp y las mismas consultas de precios y horarios todos los días.',
+    builtLabel: 'En la demo',
+    built: [
+      'Menú digital para ver desde el celular',
+      'Diseño con la identidad de cada local',
+    ],
+    extra: [
+      'Toma de pedidos automatizada por WhatsApp',
+      'Chatbot de consultas frecuentes (horarios, precios, zonas de entrega)',
+      'Avisos de estado del pedido',
+    ],
+    cta: 'Quiero digitalizar mi menú',
+    message: 'Hola, quiero un menú digital con toma de pedidos para mi local gastronómico.',
+    links: [
+      { label: 'Demo 1', href: 'https://panchodoto.godreamai.com/' },
+      { label: 'Demo 2', href: 'https://blisspoint.vercel.app/' },
+    ],
+  },
+  {
+    badge: 'Demo conceptual',
+    badgeStatus: 'neutral',
+    tag: 'Inmobiliarias',
+    image: '/works/inmobiliaria.png',
+    previewUrl: 'https://crm-demo.godreamai.com/',
+    title: 'Captación y seguimiento de leads para inmobiliarias',
+    problem: 'Consultas por propiedades que llegan por la web, WhatsApp y portales, y quedan en el celular de cada agente sin seguimiento.',
+    builtLabel: 'En la demo',
+    built: [
+      'Web con catálogo de propiedades',
+      'CRM de gestión de leads',
+    ],
+    extra: [
+      'Conexión entre la web y el CRM para que cada consulta entre sola',
+      'Bot de WhatsApp que responde por propiedad y agenda visitas',
+      'Asignación automática de leads a agentes',
+      'Seguimiento automático de consultas sin respuesta',
+    ],
+    cta: 'Quiero esto para mi inmobiliaria',
+    message: 'Hola, quiero un sistema de captación y seguimiento de leads para mi inmobiliaria.',
+    links: [
+      { label: 'Web 1', href: 'https://virginiamalanoinmobiliaria.godreamai.com/' },
+      { label: 'Web 2', href: 'https://herediaprops.godreamai.com/' },
+      { label: 'CRM', href: 'https://crm-demo.godreamai.com/' },
+    ],
+  },
+  {
+    badge: 'Demo conceptual',
+    badgeStatus: 'neutral',
+    tag: 'Estética y salud',
+    image: '/works/estetica.png',
+    previewUrl: 'https://excelsia-salud.godreamai.com/',
+    title: 'Web y gestión de turnos para centros de estética',
+    problem: 'Turnos que se coordinan por mensaje, huecos en la agenda y clientas que no vuelven porque nadie les escribe.',
+    builtLabel: 'En la demo',
+    built: [
+      'Web con catálogo de tratamientos',
+      'Sección antes/después',
+      'Identidad de marca',
+    ],
+    extra: [
+      'Reserva de turnos online',
+      'Recordatorios automáticos por WhatsApp',
+      'Chatbot de consultas frecuentes',
+      'Mensajes de reactivación de clientas',
+    ],
+    cta: 'Quiero ordenar mis turnos',
+    message: 'Hola, quiero una web con gestión de turnos para mi centro de estética.',
+    links: [{ label: 'Ver demo', href: 'https://excelsia-salud.godreamai.com/' }],
+  },
+];
+
 export function Work() {
-  const clients = [
-    { name: 'Nombre del proyecto', tag: 'Rubro', desc: 'Descripción corta de la solución que construimos para este cliente.', href: '#' },
-    { name: 'Nombre del proyecto', tag: 'Rubro', desc: 'Descripción corta de la solución que construimos para este cliente.', href: '#' },
-  ];
-  const proposals = [
-    { name: 'Nombre del proyecto', tag: 'Rubro', desc: 'Descripción corta de la propuesta que armamos.', href: '#' },
-    { name: 'Nombre del proyecto', tag: 'Rubro', desc: 'Descripción corta de la propuesta que armamos.', href: '#' },
-  ];
   return (
     <section id="trabajos" className="sec" style={{ scrollMarginTop: 68, position: 'relative', overflow: 'hidden' }}>
       <GridBg x="22%" y="75%" />
       <div className="wrap" style={{ position: 'relative' }}>
-      <SectionHead title="Algunos sistemas que construimos." lead="Ejemplos reales de páginas, paneles y chatbots que diseñamos para distintos rubros." />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 20 }} className="stack-sm">
-        {clients.map((p, i) => <WorkCard key={p.name + i} delay={i * 70} {...p} />)}
+      <SectionHead title="Algunos sistemas que construimos." lead="Un producto propio, un cliente real y demos por rubro: qué ya funciona y qué se puede sumar." />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {WORK_CLIENTS.map((p, i) => <WorkCard key={p.title} p={p} wide delay={i * 70} />)}
       </div>
       <div style={{ marginTop: 64 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 24, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}>
           <div style={{ font: 'var(--text-h3)', letterSpacing: 'var(--ls-h3)' }}>Propuestas y demos</div>
-          <p style={{ fontSize: 14, color: 'var(--text-3)' }}>Sitios que armamos para presentarle a potenciales clientes. No llegaron a cerrarse, pero muestran cómo trabajamos.</p>
+          <p style={{ fontSize: 14, color: 'var(--text-3)' }}>Sitios y sistemas que armamos para presentarle a potenciales clientes. No llegaron a cerrarse, pero muestran cómo trabajamos.</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 20 }} className="stack-sm">
-          {proposals.map((p, i) => <WorkCard key={p.name + i} delay={i * 70} {...p} />)}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 20 }} className="stack-sm">
+          {WORK_DEMOS.map((p, i) => <WorkCard key={p.title} p={p} delay={i * 70} />)}
         </div>
       </div>
     </div></section>

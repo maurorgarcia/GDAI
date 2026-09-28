@@ -53,6 +53,23 @@
 /* Card/step hover lift (pairs with .reveal, which already carries the transition) */
 .hover-card:hover{border-color:var(--border-hover);background:var(--surface-2)}
 
+/* Work preview (browser frame) */
+.work-preview{transition:border-color var(--dur-fast) var(--ease-out)}
+.work-preview:hover{border-color:var(--accent)!important}
+.work-preview__img{transition:transform 600ms var(--ease-out)}
+.work-preview:hover .work-preview__img{transform:scale(1.03)}
+@media (prefers-reduced-motion:reduce){.work-preview__img{transition:none}.work-preview:hover .work-preview__img{transform:none}}
+
+/* Work card: collapsible detail */
+.work-toggle{display:inline-flex;align-items:center;gap:8px;padding:0;background:none;border:0;cursor:pointer;color:var(--accent-text);font:500 14px/1 var(--font-sans);transition:var(--transition-control)}
+.work-toggle:hover{color:var(--text-1)}
+.work-toggle:focus-visible{outline:none;box-shadow:var(--focus-shadow);border-radius:var(--radius-sm)}
+.work-toggle svg,.work-toggle span[aria-hidden]{transition:transform var(--dur-base) var(--ease-out)}
+.work-toggle[data-open="true"] span[aria-hidden]{transform:rotate(180deg)}
+.work-collapse{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--dur-slow,320ms) var(--ease-out)}
+.work-collapse[data-open="true"]{grid-template-rows:1fr}
+@media (prefers-reduced-motion:reduce){.work-collapse{transition:none}}
+
 /* Scrollbar */
 html{scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg)}
 ::-webkit-scrollbar{width:8px;height:8px}
