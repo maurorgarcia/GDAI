@@ -52,12 +52,12 @@ export function Problems() {
 
 function MiniFlow({ steps }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 4, border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-lg)', background: 'var(--surface-1)', padding: '20px 24px', marginTop: 40 }}>
+    <div className="miniflow" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 4, border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-lg)', background: 'var(--surface-1)', padding: '20px 24px', marginTop: 40 }}>
       {steps.map((s, i) => (
-        <React.Fragment key={s}>
-          {i > 0 && <span style={{ color: 'var(--text-3)', flex: 'none', margin: '0 16px' }}><Icon name="arrow-right" size={16} /></span>}
+        <span key={s} className="miniflow__step">
           <span style={{ fontSize: 14, color: i === steps.length - 1 ? 'var(--text-1)' : 'var(--text-2)', fontWeight: i === steps.length - 1 ? 500 : 400 }}>{s}</span>
-        </React.Fragment>
+          {i < steps.length - 1 && <span className="miniflow__arrow" style={{ color: 'var(--text-3)', flex: 'none' }}><Icon name="arrow-right" size={16} /></span>}
+        </span>
       ))}
     </div>
   );
@@ -199,11 +199,15 @@ function WorkCard({ p, wide = false, delay }) {
     </div>
   );
   const actions = (
-    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
       <Button size={big ? 'lg' : 'md'} iconRight="arrow-right" href={whatsappHref(p.message)} target="_blank" rel="noopener">{p.cta}</Button>
-      {p.links.map((l) => (
-        <Button key={l.href} variant="secondary" size={big ? 'lg' : 'sm'} iconRight="arrow-up-right" href={l.href} target="_blank" rel="noopener">{l.label}</Button>
-      ))}
+      {p.links.length > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+          {p.links.map((l) => (
+            <Button key={l.href} variant="secondary" size={big ? 'lg' : 'sm'} iconRight="arrow-up-right" href={l.href} target="_blank" rel="noopener">{l.label}</Button>
+          ))}
+        </div>
+      )}
     </div>
   );
   return (
