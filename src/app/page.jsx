@@ -1,5 +1,5 @@
 import { Hero } from '@/components/site/Hero.jsx';
-import { Problems, Services, Process, Work, Faq, Principles, CtaBand } from '@/components/site/HomeSections.jsx';
+import { Problems, Services, Process, Work, Faq, CtaBand } from '@/components/site/HomeSections.jsx';
 
 export default function Home() {
   return (
@@ -10,7 +10,6 @@ export default function Home() {
       <Process />
       <Work />
       <Faq />
-      <Principles />
       <CtaBand />
     </>
   );

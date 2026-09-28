@@ -1,8 +1,8 @@
 import React from 'react';
+import { BrandIcon } from '../icons/BrandIcon.jsx';
 import { whatsappHref } from '../../lib/whatsapp.js';
 
 export function WhatsAppButton() {
-  const maskUrl = 'https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/whatsapp.svg';
   return (
     <a
       href={whatsappHref('Hola, quiero saber más sobre Go Dream AI.')}
@@ -21,21 +21,12 @@ export function WhatsAppButton() {
         alignItems: 'center',
         justifyContent: 'center',
         background: 'var(--accent)',
+        color: 'var(--on-accent)',
         borderRadius: '50%',
         boxShadow: 'var(--shadow-dropdown)',
       }}
     >
-      <span
-        aria-hidden="true"
-        style={{
-          width: 26,
-          height: 26,
-          display: 'block',
-          background: 'var(--on-accent)',
-          WebkitMask: `url(${maskUrl}) no-repeat center / contain`,
-          mask: `url(${maskUrl}) no-repeat center / contain`,
-        }}
-      />
+      <BrandIcon name="whatsapp" size={26} />
     </a>
   );
 }

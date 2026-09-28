@@ -30,11 +30,11 @@ Abrí [http://localhost:3000](http://localhost:3000). Los cambios se ven al guar
 src/
 ├── app/                  Rutas y metadata (layout, page, sitemap, robots, not-found, og image)
 ├── components/
-│   ├── site/             Secciones del sitio (Header, Hero, HomeSections, Footer, WhatsAppButton)
-│   ├── actions/ display/ feedback/ forms/ icons/ navigation/   Sistema de componentes (Button, Badge, Tag, Tabs, etc.)
-│   └── shared/           Utilidades de componentes (Reveal, css)
+│   ├── site/             Secciones del sitio (Header, Hero, HomeSections, Footer, WhatsAppButton) y sus partes interactivas (ServicesTabs, WorkCard, FaqList)
+│   ├── actions/ display/ feedback/ icons/ navigation/   Componentes base (Button, IconButton, Badge, Tag, Tabs, Spinner, Icon)
+│   └── shared/           Utilidades de componentes (Reveal)
 ├── lib/whatsapp.js       Número de contacto y armado de links de WhatsApp
-└── styles/               Tokens de diseño (colores, tipografía, espaciado, movimiento) y estilos del sitio
+└── styles/               Tokens de diseño (colores, tipografía, espaciado, movimiento), estilos de los componentes base (components.css) y del sitio (site.css)
 public/
 ├── works/                Capturas de los proyectos de la sección Trabajos
 ├── fonts/                Geist y Geist Mono (locales)
@@ -42,7 +42,9 @@ public/
 scripts/capture-works.mjs Genera las capturas de los proyectos
 ```
 
-Las secciones de la home están en [src/components/site/HomeSections.jsx](src/components/site/HomeSections.jsx) y se ordenan en [src/app/page.jsx](src/app/page.jsx). Los componentes base tienen una guía de uso en el `.prompt.md` que está junto a cada uno.
+Las secciones de la home están en [src/components/site/HomeSections.jsx](src/components/site/HomeSections.jsx) y se ordenan en [src/app/page.jsx](src/app/page.jsx). Ese archivo es un componente de servidor (HTML estático); solo las partes con interacción son componentes de cliente: las pestañas de Soluciones, las cards de Trabajos y el acordeón de Preguntas. Los componentes base tienen una guía de uso en el `.prompt.md` que está junto a cada uno.
+
+**Íconos.** Son SVG incluidos en el proyecto, sin depender de ningún CDN. Los de interfaz (Lucide) están en [src/components/icons/icons-data.js](src/components/icons/icons-data.js); para usar uno nuevo hay que sumarlo ahí. Los logos de WhatsApp e Instagram están en `BrandIcon.jsx`.
 
 ## Contenido que se edita seguido
 
@@ -53,20 +55,20 @@ Las secciones de la home están en [src/components/site/HomeSections.jsx](src/co
 - `WORK_CLIENTS`: proyectos cerrados (se muestran a todo el ancho).
 - `WORK_DEMOS`: propuestas y demos (se muestran en tres columnas).
 
-Cada proyecto tiene título, problema, lo construido (`built`), lo que se puede sumar (`extra`), el mensaje de WhatsApp de su botón (`message`), sus links y la captura (`image`, `previewUrl`). En "Construido" se pone solo lo que la demo o el sistema hace hoy; lo demás va en "Se puede sumar".
+Cada proyecto tiene título, problema, `chips` (3 o 4 etiquetas cortas que se ven siempre: lo construido y lo que se puede sumar), la lista completa de lo construido (`built`) y de lo que se puede sumar (`extra`) que se abre con "Ver la lista completa", el mensaje de WhatsApp de su botón (`message`), sus links y la captura (`image`, `previewUrl`). En "Construido" se pone solo lo que la demo o el sistema hace hoy; lo demás va en "Se puede sumar".
 
 **Capturas de los proyectos.** Son archivos PNG en `public/works/` y se sirven como cualquier archivo estático: quedan en el repo y no hace falta regenerarlas en cada deploy. Para actualizar una, reemplazá el archivo conservando el nombre, o generala con:
 
 ```bash
 node scripts/capture-works.mjs            # todas
-node scripts/capture-works.mjs liever     # solo una
+node scripts/capture-works.mjs estetica   # solo una
 ```
 
-El script usa Edge o Chrome sin ventana y guarda la captura de la parte de arriba de cada sitio a 1440×900. Nombres válidos: `goconcesionaria`, `liever`, `gastronomia`, `inmobiliaria`, `estetica`. Si falta una imagen, la card se muestra sin captura.
+El script usa Edge o Chrome sin ventana y guarda la captura de la parte de arriba de cada sitio a 1440×900. Nombres válidos: `gastronomia`, `inmobiliaria`, `estetica`. Los dos proyectos principales (GoConcesionaria y Liever) no salen de ese script: son capturas de la pantalla interna (`goconcesionaria-leads.png`, `liever-panel.png`) sacadas con las cuentas de demo de cada sistema, con el celular de WhatsApp superpuesto (`Showcases.jsx`; los mensajes del chat son de ejemplo). Si se actualizan, conviene guardarlas con un nombre nuevo, porque `next/image` cachea por nombre de archivo. Si falta una imagen, la card se muestra sin captura. Las capturas se sirven con `next/image`, que las entrega optimizadas (WebP y tamaños según la pantalla), así que el PNG del repo puede ser grande.
 
 ## SEO y metadata
 
-El título, la descripción y Open Graph están en [src/app/layout.js](src/app/layout.js); el dominio base es `https://www.godreamai.com`. `sitemap.js`, `robots.js` y `opengraph-image.jsx` generan los archivos correspondientes. Si cambia el dominio, hay que actualizarlo en `layout.js` y `sitemap.js`.
+El título, la descripción y Open Graph están en [src/app/layout.js](src/app/layout.js); el dominio base es `https://www.godreamai.com`. `sitemap.js`, `robots.js` y `opengraph-image.jsx` generan los archivos correspondientes. La imagen para redes usa el logo de `public/logo-white.png` y la fuente de `src/app/fonts/` (las imágenes OG no aceptan `woff2`, por eso es un `.ttf`). La fecha del sitemap (`lastModified`) está fija: actualizala cuando haya cambios de contenido. Si cambia el dominio, hay que actualizarlo en `layout.js` y `sitemap.js`.
 
 ## Deploy
 

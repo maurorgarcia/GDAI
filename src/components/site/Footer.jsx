@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BrandIcon } from '../icons/BrandIcon.jsx';
 import { whatsappHref } from '../../lib/whatsapp.js';
 
 export function Footer() {
@@ -13,6 +14,7 @@ export function Footer() {
         </div>
         <div className="center-sm" style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
           <span className="eyebrow">Empresa</span>
+          <Link className="navlink" href="/#problemas">Problemas</Link>
           <Link className="navlink" href="/#soluciones">Soluciones</Link>
           <Link className="navlink" href="/#proceso">Cómo trabajamos</Link>
           <Link className="navlink" href="/#trabajos">Trabajos</Link>
@@ -22,7 +24,7 @@ export function Footer() {
           <span style={{ font: '700 14px/1 var(--font-sans)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--text-1)', marginBottom: 4 }}>Contacto</span>
           {[['whatsapp', 'WhatsApp', whatsappHref('Hola, quiero saber más sobre Go Dream AI.')], ['instagram', 'Instagram', 'https://www.instagram.com/godreamai.ar/']].map(([n, l, href]) => (
             <a key={n} className="fcontact" href={href} target="_blank" rel="noopener">
-              <img src={'https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/' + n + '.svg'} alt="" width="20" height="20" />{l}
+              <BrandIcon name={n} />{l}
             </a>
           ))}
           <a className="fcontact" href="mailto:go@godreamai.com">go@godreamai.com</a>
@@ -30,7 +32,7 @@ export function Footer() {
         </div>
       </div>
       <div className="wrap center-sm" style={{ padding: '20px var(--gutter)', borderTop: '1px solid var(--border)', fontSize: 13, color: 'var(--text-3)' }}>
-        <span>© 2026 Go Dream AI</span>
+        <span>© {new Date().getFullYear()} Go Dream AI</span>
       </div>
     </footer>
   );

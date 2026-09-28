@@ -1,27 +1,13 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Button } from '../actions/Button.jsx';
 import { Icon } from '../icons/Icon.jsx';
-import { Tag } from '../display/Tag.jsx';
-import { Badge } from '../display/Badge.jsx';
-import { Tabs } from '../navigation/Tabs.jsx';
 import { Reveal } from '../shared/Reveal.jsx';
 import { whatsappHref } from '../../lib/whatsapp.js';
-
-function SectionHead({ title, lead }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, marginBottom: 56, maxWidth: 680, marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}>
-      <h2 className="h1 title-gradient">{title}</h2>
-      {lead && <p className="lead" style={{ margin: '0 auto' }}>{lead}</p>}
-    </div>
-  );
-}
-
-function GridBg({ x = '50%', y = '50%' }) {
-  return (
-    <div className="grid-lines" style={{ position: 'absolute', inset: 0, opacity: 0.35, pointerEvents: 'none', maskImage: `radial-gradient(ellipse at ${x} ${y}, #000 0%, transparent 65%)`, WebkitMaskImage: `radial-gradient(ellipse at ${x} ${y}, #000 0%, transparent 65%)` }} />
-  );
-}
+import { SectionHead, GridBg } from './shared.jsx';
+import { ServicesTabs } from './ServicesTabs.jsx';
+import { WorkCard } from './WorkCard.jsx';
+import { FaqList } from './FaqList.jsx';
+import { ConcesionariaPhone, LieverPhone } from './Showcases.jsx';
 
 export function Problems() {
   const items = [
@@ -50,47 +36,15 @@ export function Problems() {
   );
 }
 
-function MiniFlow({ steps }) {
-  return (
-    <div className="miniflow" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 4, border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-lg)', background: 'var(--surface-1)', padding: '20px 24px', marginTop: 40 }}>
-      {steps.map((s, i) => (
-        <span key={s} className="miniflow__step">
-          <span style={{ fontSize: 14, color: i === steps.length - 1 ? 'var(--text-1)' : 'var(--text-2)', fontWeight: i === steps.length - 1 ? 500 : 400 }}>{s}</span>
-          {i < steps.length - 1 && <span className="miniflow__arrow" style={{ color: 'var(--text-3)', flex: 'none' }}><Icon name="arrow-right" size={16} /></span>}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 export function Services() {
-  const data = {
-    ia: { title: 'Inteligencia artificial', desc: 'Agentes y asistentes que responden, clasifican y buscan información dentro de tus procesos.', items: ['Atención al cliente con IA', 'Asistentes internos', 'Recuperación de información', 'Soporte a decisiones'], flow: ['Cliente escribe por WhatsApp', 'La IA responde al instante', 'Se registra en tu sistema'] },
-    auto: { title: 'Automatización', desc: 'Flujos que mueven datos, disparan avisos y hacen seguimientos sin intervención manual.', items: ['Automatización de procesos', 'Seguimientos comerciales', 'Notificaciones automáticas', 'Sincronización de datos'], flow: ['Llega un dato nuevo', 'Se procesa sin intervención', 'Se notifica a quien corresponde'] },
-    soft: { title: 'Software a medida', desc: 'Herramientas internas, paneles y plataformas pensadas para cómo trabaja tu equipo.', items: ['Dashboards', 'Herramientas internas', 'Portales de clientes', 'Funcionalidades de CRM'], flow: ['Datos dispersos en varios lugares', 'Un panel que los une', 'Tu equipo decide con todo a la vista'] },
-    int: { title: 'Integraciones', desc: 'Conectamos los sistemas que ya usás en lugar de reemplazarlos.', items: ['CRM y ERP', 'WhatsApp y email', 'Planillas y bases de datos', 'APIs de terceros'], flow: ['CRM', 'WhatsApp', 'Planillas y sistemas'] },
-  };
-  const [tab, setTab] = useState('ia');
-  const d = data[tab];
   return (
     <section id="soluciones" className="sec" style={{ scrollMarginTop: 68, position: 'relative', overflow: 'hidden' }}>
       <GridBg x="82%" y="65%" />
       <div className="wrap" style={{ position: 'relative' }}>
-      <SectionHead title="Combinamos la tecnología que tu problema necesita." />
-      <Tabs value={tab} onChange={setTab} items={[{ value: 'ia', label: 'IA' }, { value: 'auto', label: 'Automatización' }, { value: 'soft', label: 'Software' }, { value: 'int', label: 'Integraciones' }]} />
-      <div key={tab} className="fade-swap" style={{ paddingTop: 48 }}>
-        <div className="stack-sm" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <h3 className="h2">{d.title}</h3>
-            <p className="lead">{d.desc}</p>
-          </div>
-          <ul style={{ listStyle: 'none', margin: 0, padding: 0, borderTop: '1px solid var(--border)' }}>
-            {d.items.map((it) => <li key={it} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 0', borderBottom: '1px solid var(--border)', fontSize: 17 }}>{it}<span style={{ color: 'var(--accent)' }}><Icon name="check" size={16} /></span></li>)}
-          </ul>
-        </div>
-        <MiniFlow steps={d.flow} />
+        <SectionHead title="Combinamos la tecnología que tu problema necesita." />
+        <ServicesTabs />
       </div>
-    </div></section>
+    </section>
   );
 }
 
@@ -124,129 +78,19 @@ export function Process() {
   );
 }
 
-function Bullets({ label, items, icon, color }) {
-  return (
-    <div>
-      <div className="eyebrow" style={{ marginBottom: 12 }}>{label}</div>
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {items.map((it) => (
-          <li key={it} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, lineHeight: 1.5, color: 'var(--text-2)' }}>
-            <span style={{ color, marginTop: 3 }}><Icon name={icon} size={14} /></span>
-            {it}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function Preview({ p, onFail }) {
-  const ref = useRef(null);
-  const host = new URL(p.previewUrl).host;
-  useEffect(() => {
-    const im = ref.current;
-    if (im && im.complete && im.naturalWidth === 0) onFail();
-  }, [onFail]);
-  return (
-    <a href={p.previewUrl} target="_blank" rel="noopener" aria-label={'Abrir ' + host} className="work-preview" style={{ display: 'block', border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'var(--bg)', textDecoration: 'none' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
-        <span style={{ display: 'flex', gap: 6 }}>
-          {[0, 1, 2].map((i) => <span key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--border-strong)' }} />)}
-        </span>
-        <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', font: '500 11px/1 var(--font-mono)', color: 'var(--text-3)', background: 'var(--bg)', borderRadius: 'var(--radius-sm)', padding: '6px 10px' }}>{host}</span>
-        <span style={{ color: 'var(--text-3)' }}><Icon name="arrow-up-right" size={14} /></span>
-      </div>
-      <div style={{ aspectRatio: '16 / 10', overflow: 'hidden' }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img ref={ref} src={p.image} alt={'Captura de ' + host} loading="lazy" onError={onFail} className="work-preview__img" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-      </div>
-    </a>
-  );
-}
-
-function WorkCard({ p, wide = false, delay }) {
-  const big = p.featured;
-  const [failed, setFailed] = useState(false);
-  const [open, setOpen] = useState(false);
-  const preview = failed ? null : <Preview p={p} onFail={() => setFailed(true)} />;
-  const summary = (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-        <Badge status={p.badgeStatus}>{p.badge}</Badge>
-        <Tag>{p.tag}</Tag>
-      </div>
-      <h3 className={big ? 'h2' : undefined} style={big ? undefined : { font: 'var(--text-h3)', letterSpacing: 'var(--ls-h3)' }}>{p.title}</h3>
-      <p style={{ fontSize: big ? 16 : 14, color: 'var(--text-2)', lineHeight: 1.55 }}>{p.problem}</p>
-    </div>
-  );
-  const listsInner = (
-    <div className={wide ? 'stack-sm' : undefined} style={wide ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(24px,5vw,56px)', paddingTop: 32, borderTop: '1px solid var(--border)' } : { display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <Bullets label={p.builtLabel} items={p.built} icon="check" color="var(--accent)" />
-      <Bullets label="Se puede sumar" items={p.extra} icon="plus" color="var(--text-3)" />
-    </div>
-  );
-  const lists = (
-    <div>
-      <button type="button" className="work-toggle" onClick={() => setOpen(!open)} aria-expanded={open} data-open={open}>
-        {open ? 'Ocultar detalle' : 'Ver qué incluye'}
-        <Icon name="chevron-down" size={16} />
-      </button>
-      <div className="work-collapse" data-open={open}>
-        <div style={{ minHeight: 0, overflow: 'hidden' }}>
-          <div style={{ paddingTop: 20 }}>{listsInner}</div>
-        </div>
-      </div>
-    </div>
-  );
-  const actions = (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
-      <Button size={big ? 'lg' : 'md'} iconRight="arrow-right" href={whatsappHref(p.message)} target="_blank" rel="noopener">{p.cta}</Button>
-      {p.links.length > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
-          {p.links.map((l) => (
-            <Button key={l.href} variant="secondary" size={big ? 'lg' : 'sm'} iconRight="arrow-up-right" href={l.href} target="_blank" rel="noopener">{l.label}</Button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-  return (
-    <Reveal
-      delay={delay}
-      style={{ border: '1px solid ' + (big ? 'var(--accent)' : 'var(--border)'), borderRadius: 'var(--radius-lg)', padding: big ? 'clamp(24px,4vw,40px)' : 24, background: 'var(--surface-1)' }}
-    >
-      {wide ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-          <div className="stack-sm" style={{ display: 'grid', gridTemplateColumns: preview ? '1fr 1.15fr' : '1fr', gap: 'clamp(32px,5vw,56px)', alignItems: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-              {summary}
-              {actions}
-            </div>
-            {preview}
-          </div>
-          {lists}
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, height: '100%' }}>
-          {preview}
-          {summary}
-          {lists}
-          <div style={{ marginTop: 'auto' }}>{actions}</div>
-        </div>
-      )}
-    </Reveal>
-  );
-}
-
 const WORK_CLIENTS = [
   {
     featured: true,
     badge: 'Producto propio',
     badgeStatus: 'accent',
     tag: 'Concesionarias',
-    image: '/works/goconcesionaria.png',
+    image: '/works/goconcesionaria-leads.png',
     previewUrl: 'https://goconcesionaria.godreamai.com/',
+    previewLabel: 'goconcesionaria.godreamai.com/leads',
+    phone: <ConcesionariaPhone />,
+    phonePos: { width: '25%', bottom: '-22%' },
     title: 'CRM de ventas, leads y stock con WhatsApp',
+    chips: { built: ['Bot de WhatsApp', 'Clasificación de leads', 'Pipeline de ventas'], extra: ['Recordatorios a vendedores'] },
     problem: 'Las consultas entran por WhatsApp, se reparten a mano entre vendedores y nadie sabe qué lead está caliente ni qué unidades hay disponibles.',
     builtLabel: 'Construido',
     built: [
@@ -270,9 +114,14 @@ const WORK_CLIENTS = [
     badge: 'Cliente real',
     badgeStatus: 'success',
     tag: 'Productos a medida (CNC)',
-    image: '/works/liever.png',
+    image: '/works/liever-panel.png',
+    imageAspect: '4 / 3',
     previewUrl: 'https://liever.godreamai.com/',
+    previewLabel: 'liever.godreamai.com/admin/pedidos',
+    phone: <LieverPhone />,
+    phonePos: { width: '22%', bottom: '-17%' },
     title: 'Tienda online con pedidos a WhatsApp y panel de gestión',
+    chips: { built: ['Catálogo y carrito', 'Pedido a WhatsApp', 'Panel de pedidos'], extra: ['Pagos online'] },
     problem: 'Vender productos a medida por mensaje, sin catálogo actualizado ni registro de qué pedidos se confirmaron.',
     builtLabel: 'Construido',
     built: [
@@ -303,6 +152,7 @@ const WORK_DEMOS = [
     image: '/works/gastronomia.png',
     previewUrl: 'https://panchodoto.godreamai.com/',
     title: 'Menú digital y pedidos automatizados para gastronomía',
+    chips: { built: ['Menú digital', 'Identidad del local'], extra: ['Pedidos por WhatsApp', 'Chatbot de consultas'] },
     problem: 'Menús en PDF o fotos sueltas, pedidos que se anotan a mano por WhatsApp y las mismas consultas de precios y horarios todos los días.',
     builtLabel: 'En la demo',
     built: [
@@ -328,6 +178,7 @@ const WORK_DEMOS = [
     image: '/works/inmobiliaria.png',
     previewUrl: 'https://crm-demo.godreamai.com/',
     title: 'Captación y seguimiento de leads para inmobiliarias',
+    chips: { built: ['Web con catálogo', 'CRM de leads'], extra: ['Bot de WhatsApp', 'Asignación automática'] },
     problem: 'Consultas por propiedades que llegan por la web, WhatsApp y portales, y quedan en el celular de cada agente sin seguimiento.',
     builtLabel: 'En la demo',
     built: [
@@ -355,6 +206,7 @@ const WORK_DEMOS = [
     image: '/works/estetica.png',
     previewUrl: 'https://excelsia-salud.godreamai.com/',
     title: 'Web y gestión de turnos para centros de estética',
+    chips: { built: ['Web de tratamientos', 'Antes y después', 'Identidad de marca'], extra: ['Reserva de turnos'] },
     problem: 'Turnos que se coordinan por mensaje, huecos en la agenda y clientas que no vuelven porque nadie les escribe.',
     builtLabel: 'En la demo',
     built: [
@@ -385,8 +237,8 @@ export function Work() {
       </div>
       <div style={{ marginTop: 64 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 24, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}>
-          <div style={{ font: 'var(--text-h3)', letterSpacing: 'var(--ls-h3)' }}>Propuestas y demos</div>
-          <p style={{ fontSize: 14, color: 'var(--text-3)' }}>Sitios y sistemas que armamos para presentarle a potenciales clientes. No llegaron a cerrarse, pero muestran cómo trabajamos.</p>
+          <div style={{ font: 'var(--text-h3)', letterSpacing: 'var(--ls-h3)' }}>Demos por rubro</div>
+          <p style={{ fontSize: 14, color: 'var(--text-3)' }}>Así se vería para tu negocio: sitios y sistemas armados por rubro para mostrar cómo trabajamos.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 20 }} className="stack-sm">
           {WORK_DEMOS.map((p, i) => <WorkCard key={p.title} p={p} delay={i * 70} />)}
@@ -396,54 +248,22 @@ export function Work() {
   );
 }
 
+const FAQ_ITEMS = [
+  ['¿Necesito saber de tecnología para trabajar con ustedes?', 'No. Vos conocés tu negocio; nosotros nos encargamos de la parte técnica. Te explicamos todo en términos simples antes de avanzar.'],
+  ['¿Funciona para cualquier rubro?', 'Sí. No vendemos un producto único: cada solución se diseña según los procesos reales de tu empresa, sea cual sea el rubro.'],
+  ['Ya uso planillas y WhatsApp para mi negocio, ¿para qué necesito esto?', 'No reemplazamos lo que ya usás, lo conectamos. La idea es que dejes de cargar los mismos datos a mano en varios lugares.'],
+  ['¿Cuánto tiempo lleva un proyecto?', 'Depende del alcance. Después del diagnóstico te damos un plazo concreto, no una estimación genérica.'],
+  ['¿Qué pasa si la solución no se ajusta a lo que esperaba?', 'El diagnóstico inicial existe justamente para evitar eso: definimos el alcance antes de construir, no después.'],
+];
+
 export function Faq() {
-  const items = [
-    ['¿Necesito saber de tecnología para trabajar con ustedes?', 'No. Vos conocés tu negocio; nosotros nos encargamos de la parte técnica. Te explicamos todo en términos simples antes de avanzar.'],
-    ['¿Funciona para cualquier rubro?', 'Sí. No vendemos un producto único: cada solución se diseña según los procesos reales de tu empresa, sea cual sea el rubro.'],
-    ['Ya uso planillas y WhatsApp para mi negocio, ¿para qué necesito esto?', 'No reemplazamos lo que ya usás, lo conectamos. La idea es que dejes de cargar los mismos datos a mano en varios lugares.'],
-    ['¿Cuánto tiempo lleva un proyecto?', 'Depende del alcance. Después del diagnóstico te damos un plazo concreto, no una estimación genérica.'],
-    ['¿Qué pasa si la solución no se ajusta a lo que esperaba?', 'El diagnóstico inicial existe justamente para evitar eso: definimos el alcance antes de construir, no después.'],
-  ];
-  const [open, setOpen] = useState(-1);
   return (
     <section id="preguntas" className="sec" style={{ scrollMarginTop: 68, position: 'relative', overflow: 'hidden' }}>
       <GridBg x="78%" y="20%" />
       <div className="wrap" style={{ position: 'relative' }}>
       <SectionHead title="Preguntas que quizás te estés haciendo." />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 680, marginLeft: 'auto', marginRight: 'auto' }}>
-        {items.map(([q, a], i) => (
-          <div key={q} className="faq-item" data-open={open === i}>
-            <button className="faq-q" onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i}>
-              {q}
-              <span className="faq-chevron"><Icon name="chevron-down" size={18} /></span>
-            </button>
-            <div className="faq-a"><p>{a}</p></div>
-          </div>
-        ))}
-      </div>
+      <FaqList items={FAQ_ITEMS} />
     </div></section>
-  );
-}
-
-export function Principles() {
-  const p = [
-    ['crosshair', 'Problema primero', 'Partimos de lo que pasa en tu operación, no de una herramienta.'],
-    ['users', 'Personas + IA', 'La tecnología complementa a tu equipo; no busca reemplazarlo.'],
-    ['feather', 'Complejidad mínima', 'La mejor solución no es la que usa más tecnologías.'],
-  ];
-  return (
-    <section className="sec sec--alt" style={{ position: 'relative', overflow: 'hidden' }}>
-      <GridBg x="50%" y="50%" />
-      <div className="wrap stack-sm" style={{ position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 48 }}>
-        {p.map(([ic, t, d], i) => (
-          <Reveal key={t} delay={i * 80} className="center-sm" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <span style={{ color: 'var(--text-2)' }}><Icon name={ic} size={20} /></span>
-            <div style={{ font: 'var(--text-h3)', letterSpacing: 'var(--ls-h3)' }}>{t}</div>
-            <p style={{ color: 'var(--text-2)' }}>{d}</p>
-          </Reveal>
-        ))}
-      </div>
-    </section>
   );
 }
 

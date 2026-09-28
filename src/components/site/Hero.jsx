@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import { Button } from '../actions/Button.jsx';
 import { Badge } from '../display/Badge.jsx';
@@ -17,17 +16,6 @@ function FlowPreview() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>
         <span style={{ fontSize: 13, color: 'var(--text-2)' }}>Flujo de consultas entrantes</span>
         <Badge status="accent" dot size="sm">Activo</Badge>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, padding: '22px 18px 18px', borderBottom: '1px solid var(--border)' }}>
-        <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 34, fontWeight: 600, color: 'var(--accent)', lineHeight: 1 }}>2,1s</div>
-          <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 6 }}>Con automatización</div>
-        </div>
-        <div style={{ width: 1, alignSelf: 'stretch', background: 'var(--border)' }} />
-        <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 500, color: 'var(--text-3)', textDecoration: 'line-through', lineHeight: 1 }}>45 min</div>
-          <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 6 }}>Proceso manual</div>
-        </div>
       </div>
       <div style={{ padding: '6px 18px 10px' }}>
         {steps.map(([ic, t, ts, st, l], i) => (

@@ -1,21 +1,27 @@
 import React from 'react';
-
-const LUCIDE = 'https://cdn.jsdelivr.net/npm/lucide-static@0.460.0/icons/';
+import { ICONS } from './icons-data.js';
 
 export function Icon({ name, size = 16, color, label, style, ...rest }) {
-  const url = 'url(' + LUCIDE + name + '.svg)';
+  const els = ICONS[name];
+  if (!els) return null;
   return (
-    <span
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       role={label ? 'img' : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
-      style={{
-        display: 'inline-block', flex: 'none', width: size, height: size,
-        backgroundColor: color || 'currentColor',
-        WebkitMask: url + ' center / contain no-repeat', mask: url + ' center / contain no-repeat',
-        ...style,
-      }}
+      style={{ display: 'inline-block', flex: 'none', color: color || undefined, ...style }}
       {...rest}
-    />
+    >
+      {els.map(([Tag, attrs], i) => <Tag key={i} {...attrs} />)}
+    </svg>
   );
 }

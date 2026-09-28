@@ -8,8 +8,6 @@ import path from 'node:path';
 const OUT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public/works');
 
 const SITES = {
-  goconcesionaria: 'https://goconcesionaria.godreamai.com/',
-  liever: 'https://liever.godreamai.com/',
   gastronomia: 'https://panchodoto.godreamai.com/',
   inmobiliaria: 'https://crm-demo.godreamai.com/',
   estetica: 'https://excelsia-salud.godreamai.com/',
