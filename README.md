@@ -68,7 +68,7 @@ El script usa Edge o Chrome sin ventana y guarda la captura de la parte de arrib
 
 ## SEO y metadata
 
-El título, la descripción y Open Graph están en [src/app/layout.js](src/app/layout.js); el dominio base es `https://www.godreamai.com`. `sitemap.js`, `robots.js` y `opengraph-image.jsx` generan los archivos correspondientes. La imagen para redes usa el logo de `public/logo-white.png` y la fuente de `src/app/fonts/` (las imágenes OG no aceptan `woff2`, por eso es un `.ttf`). La fecha del sitemap (`lastModified`) está fija: actualizala cuando haya cambios de contenido. Si cambia el dominio, hay que actualizarlo en `layout.js` y `sitemap.js`.
+El título, la descripción y Open Graph están en [src/app/layout.js](src/app/layout.js); el dominio base es `https://www.godreamai.com`. `sitemap.js`, `robots.js` y `opengraph-image.jsx` generan los archivos correspondientes. La imagen para redes es solo el logo negro sobre fondo blanco (`src/app/assets/og-logo.png`), centrado, porque WhatsApp la recorta a un cuadrado por el centro. La fecha del sitemap (`lastModified`) está fija: actualizala cuando haya cambios de contenido. Si cambia el dominio, hay que actualizarlo en `layout.js` y `sitemap.js`.
 
 ## Deploy
 
