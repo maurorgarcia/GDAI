@@ -1,0 +1,25 @@
+:root{
+--space-0:0;
+--space-2xs:2px;
+--space-xs:4px;
+--space-sm:8px;
+--space-md:12px;
+--space-lg:16px;
+--space-xl:24px;
+--space-2xl:32px;
+--space-3xl:48px;
+--space-4xl:64px;
+--space-5xl:96px;
+--space-6xl:144px;
+/* Layout */
+--container-max:1360px; /* @kind spacing */
+--container-wide:1360px; /* @kind spacing */
+--container-text:680px; /* @kind spacing */
+--gutter:clamp(20px,4vw,48px); /* @kind spacing */
+--section-y:clamp(72px,10vw,144px); /* @kind spacing */
+--sidebar-w:240px; /* @kind spacing */
+--topbar-h:56px; /* @kind spacing */
+--control-h-sm:32px; /* @kind spacing */
+--control-h-md:40px; /* @kind spacing */
+--control-h-lg:48px; /* @kind spacing */
+}

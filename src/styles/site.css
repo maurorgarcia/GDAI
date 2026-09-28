@@ -1,0 +1,61 @@
+.wrap{max-width:var(--container-max);margin:0 auto;padding:0 var(--gutter)}
+.sec{padding:var(--section-y) 0;border-top:1px solid var(--border)}
+.sec--alt{background:var(--surface-1)}
+.eyebrow{font:var(--text-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-3);display:flex;gap:10px;align-items:center}
+.eyebrow b{color:var(--accent);font-weight:500}
+.h1{font:var(--text-h1);letter-spacing:var(--ls-h1)}
+.title-gradient{background:linear-gradient(90deg,var(--text-1) 40%,var(--neutral-500) 130%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.h2{font:var(--text-h2);letter-spacing:var(--ls-h2)}
+.lead{font:var(--text-body-lg);color:var(--text-2);max-width:560px}
+.navlink{background:none;border:0;padding:6px 0;color:var(--text-2);font:500 14px/1 var(--font-sans);cursor:pointer;text-decoration:none;transition:var(--transition-control)}
+.navlink:hover,.navlink[aria-current=true]{color:var(--text-1)}
+.grid-lines{background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px}
+@media (max-width:860px){.hide-sm{display:none!important}.stack-sm{grid-template-columns:1fr!important}.center-sm{align-items:center!important;justify-items:center!important;justify-content:center!important;text-align:center!important;align-self:center!important}}
+.social{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--border-strong);border-radius:var(--radius-control);transition:var(--transition-control)}
+.social img{filter:invert(96%);opacity:.72;transition:opacity var(--dur-fast) var(--ease-out)}
+.social:hover{border-color:var(--border-hover);background:var(--surface-2)}
+.social:hover img{opacity:1}
+.fcontact{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--text-2);text-decoration:none;transition:var(--transition-control)}
+.fcontact img{filter:invert(96%);opacity:.6;transition:opacity var(--dur-fast) var(--ease-out)}
+.fcontact:hover{color:var(--text-1)}
+.fcontact:hover img{opacity:1}
+.wa-fab{transition:var(--transition-control)}
+.wa-fab:hover{background:var(--accent-hover)}
+.faq-item{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface-1);transition:var(--transition-control)}
+.faq-item:hover{border-color:var(--border-hover)}
+.faq-item[data-open="true"]{border-color:var(--accent)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;background:none;border:0;cursor:pointer;text-align:left;color:var(--text-1);font-size:16px;font-weight:500;font-family:var(--font-sans)}
+.faq-item[data-open="true"] .faq-q{color:var(--accent-text)}
+.faq-q svg,.faq-q span[aria-hidden]{transition:transform var(--dur-base) var(--ease-out)}
+.faq-chevron{color:var(--accent)}
+.faq-item[data-open="true"] .faq-chevron{transform:rotate(180deg)}
+.faq-a{overflow:hidden;max-height:0;transition:max-height var(--dur-slow,320ms) var(--ease-out)}
+.faq-item[data-open="true"] .faq-a{max-height:240px}
+.faq-a p{padding:0 24px 20px;color:var(--text-2);font-size:15px;line-height:1.55;max-width:640px}
+
+/* Scroll-triggered reveal (below-fold cards/lists) */
+.reveal{opacity:0;transform:translateY(4px);transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out),background-color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out)}
+.reveal.is-visible{opacity:1;transform:translateY(0)}
+
+/* Mount-triggered fade-up (above-fold hero content) */
+@keyframes gd-fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:gd-fade-up var(--dur-slow) var(--ease-out) both}
+
+/* Content swap fade (tab panels) */
+@keyframes gd-fade{from{opacity:0}to{opacity:1}}
+.fade-swap{animation:gd-fade var(--dur-base) var(--ease-out) both}
+
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .fade-up,.fade-swap{animation:none}
+}
+
+/* Card/step hover lift (pairs with .reveal, which already carries the transition) */
+.hover-card:hover{border-color:var(--border-hover);background:var(--surface-2)}
+
+/* Scrollbar */
+html{scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg)}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--lime-400)}

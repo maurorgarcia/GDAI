@@ -1,0 +1,79 @@
+:root{
+/* Brand core */
+--gd-black:#0A0A0A;
+--gd-offwhite:#F5F5F5;
+--gd-lime:#CCFF00;
+/* Lime ramp */
+--lime-300:#E0FF66;
+--lime-400:#D6FF33;
+--lime-500:#CCFF00;
+--lime-600:#B3E000;
+--lime-700:#5E7500;
+--lime-a12:rgba(204,255,0,0.12);
+--lime-a24:rgba(204,255,0,0.24);
+/* Neutral ramp (derived from black / off-white) */
+--neutral-0:#FFFFFF;
+--neutral-50:#F5F5F5;
+--neutral-100:#EBEBEB;
+--neutral-200:#D6D6D6;
+--neutral-300:#B0B0B0;
+--neutral-400:#8A8A8A;
+--neutral-500:#666666;
+--neutral-600:#454545;
+--neutral-700:#2B2B2B;
+--neutral-800:#1C1C1C;
+--neutral-850:#151515;
+--neutral-900:#111111;
+--neutral-950:#0A0A0A;
+/* Semantic (controlled, never competing with lime) */
+--green-500:#3FCF8E; --green-a14:rgba(63,207,142,0.14);
+--amber-500:#F2B544; --amber-a14:rgba(242,181,68,0.14);
+--red-500:#FF5C4D;   --red-a14:rgba(255,92,77,0.14);
+--blue-500:#6AA6FF;  --blue-a14:rgba(106,166,255,0.14);
+
+/* Semantic aliases — dark (default) */
+--bg:var(--neutral-950);
+--surface-1:var(--neutral-900);
+--surface-2:var(--neutral-850);
+--surface-3:var(--neutral-800);
+--surface-inverse:var(--neutral-50);
+--border:rgba(245,245,245,0.08);
+--border-strong:rgba(245,245,245,0.16);
+--border-hover:rgba(245,245,245,0.28);
+--text-1:var(--neutral-50);
+--text-2:var(--neutral-300);
+--text-3:var(--neutral-400);
+--text-disabled:var(--neutral-600);
+--text-inverse:var(--neutral-950);
+--accent:var(--lime-500);
+--accent-hover:var(--lime-400);
+--accent-press:var(--lime-600);
+--accent-soft:var(--lime-a12);
+--accent-text:var(--lime-500);
+--on-accent:var(--neutral-950);
+--focus-ring:var(--lime-500);
+--overlay:rgba(0,0,0,0.64);
+--success:var(--green-500); --success-soft:var(--green-a14);
+--warning:var(--amber-500); --warning-soft:var(--amber-a14);
+--danger:var(--red-500);    --danger-soft:var(--red-a14);
+--info:var(--blue-500);     --info-soft:var(--blue-a14);
+}
+[data-theme="light"]{
+--bg:var(--neutral-50);
+--surface-1:var(--neutral-0);
+--surface-2:var(--neutral-100);
+--surface-3:var(--neutral-200);
+--surface-inverse:var(--neutral-950);
+--border:rgba(10,10,10,0.08);
+--border-strong:rgba(10,10,10,0.16);
+--border-hover:rgba(10,10,10,0.32);
+--text-1:var(--neutral-950);
+--text-2:var(--neutral-600);
+--text-3:var(--neutral-500);
+--text-disabled:var(--neutral-300);
+--text-inverse:var(--neutral-50);
+--accent-text:var(--lime-700);
+--accent-soft:rgba(204,255,0,0.32);
+--overlay:rgba(10,10,10,0.40);
+--success:#1E9E63; --warning:#B27A0E; --danger:#D93A2B; --info:#2F6FD6;
+}
