@@ -23,7 +23,7 @@ export function Header() {
   useEffect(() => {
     const f = () => setScrolled(window.scrollY > 8);
     f();
-    window.addEventListener('scroll', f);
+    window.addEventListener('scroll', f, { passive: true });
     return () => window.removeEventListener('scroll', f);
   }, []);
 

@@ -1,6 +1,9 @@
 .wrap{max-width:var(--container-max);margin:0 auto;padding:0 var(--gutter)}
-.sec{padding:var(--section-y) 0;border-top:1px solid var(--border)}
-.sec--alt{background:var(--surface-1)}
+/* Fondo de sección: línea superior con degradado + brillo lima suave (posición con --gx/--gy, intensidad con --ga) */
+.sec{position:relative;padding:var(--section-y) 0;background-color:var(--bg);background-image:linear-gradient(90deg,transparent,rgba(245,245,245,0.16) 22%,rgba(204,255,0,0.38) 50%,rgba(245,245,245,0.16) 78%,transparent),radial-gradient(ellipse 760px 460px at var(--gx,50%) var(--gy,0%),rgba(204,255,0,var(--ga,0.07)),transparent 70%);background-size:100% 1px,100% 100%;background-repeat:no-repeat;background-position:top center,center}
+.sec--alt{background-color:#141414}
+/* Grano fino sobre el fondo (profundidad en los negros lisos) */
+.sec::before,.bg-noise::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.055;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.8%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%201%200%200%200%200%201%200%200%200%200%201%200%200%200%20.55%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url(%23n)%27%2F%3E%3C%2Fsvg%3E");background-size:160px 160px}
 .eyebrow{font:var(--text-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-3);display:flex;gap:10px;align-items:center}
 .eyebrow b{color:var(--accent);font-weight:500}
 .h1{font:var(--text-h1);letter-spacing:var(--ls-h1)}
@@ -9,7 +12,7 @@
 .lead{font:var(--text-body-lg);color:var(--text-2);max-width:560px}
 .navlink{background:none;border:0;padding:6px 0;color:var(--text-2);font:500 14px/1 var(--font-sans);cursor:pointer;text-decoration:none;transition:var(--transition-control)}
 .navlink:hover,.navlink[aria-current=true]{color:var(--text-1)}
-.grid-lines{background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px}
+.grid-lines{background-image:linear-gradient(rgba(245,245,245,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(245,245,245,0.13) 1px,transparent 1px);background-size:64px 64px}
 .miniflow__step{display:inline-flex;align-items:center}
 .miniflow__arrow{display:inline-flex;margin:0 16px}
 @media (max-width:640px){.miniflow{flex-direction:column;align-items:flex-start!important;gap:12px!important}.miniflow__arrow{margin:0 0 0 12px;transform:rotate(90deg)}}
@@ -87,3 +90,28 @@ html{scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg)}
 .chip[data-kind="built"]{border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-1)}
 .chip[data-kind="built"] svg{color:var(--accent)}
 .chip[data-kind="extra"]{border:1px dashed var(--border-strong);color:var(--text-3)}
+
+/* Franja final lima: grilla oscura y marca de agua del logo */
+.cta-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(10,10,10,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(10,10,10,0.08) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse at 78% 55%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse at 78% 55%,#000 0%,transparent 70%)}
+.cta-mark{position:absolute;right:-5%;bottom:-34%;width:min(640px,62vw);height:auto;opacity:.1;pointer-events:none;user-select:none}
+@media (max-width:860px){.cta-mark{right:-14%;bottom:-6%;width:78vw}}
+@media (max-width:860px){.hero-lines{opacity:.3}}
+
+/* Accesibilidad: saltar al contenido y foco visible */
+.skip-link{position:absolute;left:12px;top:-64px;z-index:100;padding:10px 16px;border-radius:var(--radius-control);background:var(--accent);color:var(--on-accent);font:500 14px/1 var(--font-sans);text-decoration:none;transition:top var(--dur-fast) var(--ease-out)}
+.skip-link:focus{top:12px;outline:none;box-shadow:var(--focus-shadow)}
+main:focus{outline:none}
+.navlink:focus-visible,.faq-q:focus-visible,.fcontact:focus-visible{outline:none;box-shadow:var(--focus-shadow);border-radius:4px}
+
+/* Hero: el paso se ilumina al pasar el cursor por encima */
+.flow-row{position:relative;isolation:isolate}
+.flow-glow{position:absolute;inset:0 -18px;z-index:-1;pointer-events:none;opacity:0;background:var(--accent-soft);box-shadow:inset 2px 0 0 var(--accent);transition:opacity var(--dur-base) var(--ease-out)}
+.flow-row:hover .flow-glow{opacity:1}
+
+/* Cómo trabajamos: la línea se dibuja y los números aparecen al hacer scroll */
+.proceso-line.reveal{opacity:1;transform:scaleX(0);transform-origin:left center;transition:transform 1400ms var(--ease-out)}
+.proceso-line.reveal.is-visible{transform:scaleX(1)}
+.step-n{transform:scale(0.6);transition:transform 520ms cubic-bezier(.2,.9,.3,1.25);transition-delay:calc(var(--d,0ms) + 120ms)}
+.reveal.is-visible .step-n{transform:scale(1)}
+@media (prefers-reduced-motion:reduce){.flow-glow{transition:none}.proceso-line.reveal{transform:none;transition:none}.step-n{transform:none;transition:none}}
+@media print{.proceso-line.reveal,.step-n{transform:none!important}}

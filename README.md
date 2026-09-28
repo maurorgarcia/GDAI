@@ -57,14 +57,14 @@ Las secciones de la home están en [src/components/site/HomeSections.jsx](src/co
 
 Cada proyecto tiene título, problema, `chips` (3 o 4 etiquetas cortas que se ven siempre: lo construido y lo que se puede sumar), la lista completa de lo construido (`built`) y de lo que se puede sumar (`extra`) que se abre con "Ver la lista completa", el mensaje de WhatsApp de su botón (`message`), sus links y la captura (`image`, `previewUrl`). En "Construido" se pone solo lo que la demo o el sistema hace hoy; lo demás va en "Se puede sumar".
 
-**Capturas de los proyectos.** Son archivos PNG en `public/works/` y se sirven como cualquier archivo estático: quedan en el repo y no hace falta regenerarlas en cada deploy. Para actualizar una, reemplazá el archivo conservando el nombre, o generala con:
+**Capturas de los proyectos.** Son archivos WebP en `public/works/` y se sirven como cualquier archivo estático: quedan en el repo y no hace falta regenerarlas en cada deploy. Para actualizar una, reemplazá el archivo (si es una captura nueva, con un nombre distinto: `next/image` cachea por nombre) o generala con:
 
 ```bash
 node scripts/capture-works.mjs            # todas
 node scripts/capture-works.mjs estetica   # solo una
 ```
 
-El script usa Edge o Chrome sin ventana y guarda la captura de la parte de arriba de cada sitio a 1440×900. Nombres válidos: `gastronomia`, `inmobiliaria`, `estetica`. Los dos proyectos principales (GoConcesionaria y Liever) no salen de ese script: son capturas de la pantalla interna (`goconcesionaria-leads.png`, `liever-panel.png`) sacadas con las cuentas de demo de cada sistema, con el celular de WhatsApp superpuesto (`Showcases.jsx`; los mensajes del chat son de ejemplo). Si se actualizan, conviene guardarlas con un nombre nuevo, porque `next/image` cachea por nombre de archivo. Si falta una imagen, la card se muestra sin captura. Las capturas se sirven con `next/image`, que las entrega optimizadas (WebP y tamaños según la pantalla), así que el PNG del repo puede ser grande.
+El script usa Edge o Chrome sin ventana y guarda la captura de la parte de arriba de cada sitio a 1440×900 y la convierte a WebP con `sharp`. Nombres válidos: `gastronomia`, `inmobiliaria`, `estetica`. Los dos proyectos principales (GoConcesionaria y Liever) no salen de ese script: son capturas de la pantalla interna (`goconcesionaria-leads.webp`, `liever-panel.webp`) sacadas con las cuentas de demo de cada sistema, con el celular de WhatsApp superpuesto (`Showcases.jsx`; los mensajes del chat son de ejemplo). Si se actualizan, conviene guardarlas con un nombre nuevo, porque `next/image` cachea por nombre de archivo. Si falta una imagen, la card se muestra sin captura. Las capturas se sirven con `next/image`, que las entrega optimizadas (WebP y tamaños según la pantalla), así que el PNG del repo puede ser grande.
 
 ## SEO y metadata
 

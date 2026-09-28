@@ -1,4 +1,6 @@
 import React from 'react';
+import Image from 'next/image';
+import { HeroLines } from './HeroLines.jsx';
 import { Button } from '../actions/Button.jsx';
 import { Badge } from '../display/Badge.jsx';
 import { Icon } from '../icons/Icon.jsx';
@@ -19,10 +21,11 @@ function FlowPreview() {
       </div>
       <div style={{ padding: '6px 18px 10px' }}>
         {steps.map(([ic, t, ts, st, l], i) => (
-          <div key={i} className="fade-up" style={{ animationDelay: 260 + i * 110 + 'ms', display: 'grid', gridTemplateColumns: '28px 1fr auto', gap: 12, alignItems: 'center', padding: '12px 0', borderBottom: i < steps.length - 1 ? '1px solid var(--border)' : 0 }}>
+          <div key={i} className="fade-up flow-row" style={{ animationDelay: 260 + i * 110 + 'ms', display: 'grid', gridTemplateColumns: '28px 1fr auto', gap: 12, alignItems: 'center', padding: '12px 0', borderBottom: i < steps.length - 1 ? '1px solid var(--border)' : 0 }}>
             <span style={{ width: 28, height: 28, borderRadius: 6, border: '1px solid var(--border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: i === 1 ? 'var(--accent)' : 'var(--text-2)' }}><Icon name={ic} size={14} /></span>
             <div><div style={{ fontSize: 14 }}>{t}</div><div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>{ts}</div></div>
             <Badge status={st} size="sm">{l}</Badge>
+            <span className="flow-glow" aria-hidden="true" />
           </div>
         ))}
       </div>
@@ -33,14 +36,25 @@ function FlowPreview() {
   );
 }
 
+// Imagen de fondo opcional del hero: poner acá la ruta (por ejemplo '/bg/hero.webp') y se activa sola.
+// Tiene que ser oscura y con el tercio izquierdo casi vacío, porque ahí va el título.
+const HERO_BG = null;
+
 export function Hero() {
   return (
-    <section style={{ position: 'relative', overflow: 'hidden' }}>
+    <section className="bg-noise" style={{ position: 'relative', overflow: 'hidden' }}>
+      {HERO_BG && (
+        <>
+          <Image src={HERO_BG} alt="" fill priority sizes="100vw" style={{ objectFit: 'cover', objectPosition: 'right center', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(90deg, var(--bg) 0%, rgba(10,10,10,0.75) 38%, transparent 75%), linear-gradient(180deg, transparent 70%, var(--bg) 100%)' }} />
+        </>
+      )}
+      <HeroLines />
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 620px 420px at 72% 38%, var(--accent-soft) 0%, transparent 70%)', pointerEvents: 'none' }} />
       <div className="grid-lines" style={{ position: 'absolute', inset: 0, opacity: 0.5, maskImage: 'radial-gradient(ellipse at 70% 40%, #000 0%, transparent 65%)', WebkitMaskImage: 'radial-gradient(ellipse at 70% 40%, #000 0%, transparent 65%)' }} />
       <div className="wrap stack-sm" style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 64, alignItems: 'center', padding: 'clamp(64px,9vw,128px) var(--gutter) clamp(72px,10vw,144px)' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-          <h1 className="fade-up" style={{ font: 'var(--text-display)', letterSpacing: 'var(--ls-display)' }}>Transformá procesos repetitivos en <span style={{ color: 'var(--accent)' }}>sistemas que trabajan por vos.</span></h1>
+          <h1 style={{ font: 'var(--text-display)', letterSpacing: 'var(--ls-display)' }}>Transformá procesos repetitivos en <span style={{ color: 'var(--accent)' }}>sistemas que trabajan por vos.</span></h1>
           <p className="lead fade-up" style={{ animationDelay: '60ms' }}>Identificamos las tareas digitales que le cuestan tiempo y dinero a tu empresa, y diseñamos la solución con IA, automatización y software que las resuelve.</p>
           <div className="fade-up" style={{ animationDelay: '120ms', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Button size="lg" iconRight="arrow-right" href={whatsappHref('Hola, quiero agendar un diagnóstico para mi empresa.')} target="_blank" rel="noopener">Agendar diagnóstico</Button>

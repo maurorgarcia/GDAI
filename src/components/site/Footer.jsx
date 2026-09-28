@@ -28,7 +28,7 @@ export function Footer() {
             </a>
           ))}
           <a className="fcontact" href="mailto:go@godreamai.com">go@godreamai.com</a>
-          <span style={{ fontSize: 15, color: 'var(--text-3)', opacity: 0.7 }}>Buenos Aires, Argentina</span>
+          <span style={{ fontSize: 15, color: 'var(--text-3)' }}>Buenos Aires, Argentina</span>
         </div>
       </div>
       <div className="wrap center-sm" style={{ padding: '20px var(--gutter)', borderTop: '1px solid var(--border)', fontSize: 13, color: 'var(--text-3)' }}>

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '../actions/Button.jsx';
 import { Icon } from '../icons/Icon.jsx';
@@ -25,12 +25,7 @@ function Bullets({ label, items, icon, color }) {
 }
 
 function Preview({ p, wide, onFail }) {
-  const ref = useRef(null);
   const host = p.previewLabel || new URL(p.previewUrl).host;
-  useEffect(() => {
-    const im = ref.current;
-    if (im && im.complete && im.naturalWidth === 0) onFail();
-  }, [onFail]);
   return (
     <a href={p.previewUrl} target="_blank" rel="noopener" aria-label={'Abrir ' + host} className="work-preview" style={{ display: 'block', border: '1px solid var(--border-strong)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'var(--bg)', textDecoration: 'none' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }}>
@@ -41,7 +36,7 @@ function Preview({ p, wide, onFail }) {
         <span style={{ color: 'var(--text-3)' }}><Icon name="arrow-up-right" size={14} /></span>
       </div>
       <div style={{ position: 'relative', aspectRatio: p.imageAspect || '16 / 10', overflow: 'hidden' }}>
-        <Image ref={ref} src={p.image} alt={'Captura de ' + host} fill sizes={wide ? '(max-width: 860px) 100vw, 640px' : '(max-width: 860px) 100vw, 400px'} onError={onFail} className="work-preview__img" style={{ objectFit: 'cover', objectPosition: 'top' }} />
+        <Image src={p.image} alt={'Captura de ' + host} fill sizes={wide ? '(max-width: 860px) 100vw, 640px' : '(max-width: 860px) 100vw, 400px'} onError={onFail} className="work-preview__img" style={{ objectFit: 'cover', objectPosition: 'top' }} />
         {p.phone && (
           <div style={{ position: 'absolute', right: '3%', bottom: p.phonePos.bottom, width: p.phonePos.width, pointerEvents: 'none' }}>{p.phone}</div>
         )}

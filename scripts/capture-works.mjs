@@ -1,7 +1,9 @@
 // Saca las capturas de los proyectos de la sección Trabajos con Edge/Chrome headless.
 // Uso: node scripts/capture-works.mjs  (o pasar nombres: node scripts/capture-works.mjs liever)
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -36,7 +38,9 @@ for (const name of names) {
     console.error(`Proyecto desconocido: ${name}`);
     continue;
   }
-  const file = path.join(OUT, `${name}.png`);
+  const file = path.join(OUT, `${name}.webp`);
+  const tmp = mkdtempSync(path.join(tmpdir(), 'capture-'));
+  const png = path.join(tmp, `${name}.png`);
   console.log(`${name} -> ${file}`);
   execFileSync(browser, [
     '--headless=new',
@@ -44,8 +48,10 @@ for (const name of names) {
     '--hide-scrollbars',
     '--window-size=1440,900',
     '--virtual-time-budget=10000',
-    `--screenshot=${file}`,
+    `--screenshot=${png}`,
     url,
   ], { stdio: 'inherit' });
+  await sharp(png).webp({ quality: 90, effort: 6, smartSubsample: true }).toFile(file);
+  rmSync(tmp, { recursive: true, force: true });
 }
 console.log('Listo.');
