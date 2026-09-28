@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Go Dream AI — sitio web
 
-## Getting Started
+Sitio institucional de [Go Dream AI](https://www.godreamai.com): soluciones con IA y automatización para empresas. Es una página única (landing) con hero, problemas, soluciones, proceso, trabajos, preguntas frecuentes y contacto por WhatsApp.
 
-First, run the development server:
+Hecho con Next.js 16 (App Router), React 19 y CSS propio con tokens de diseño. No usa librerías de UI ni de estilos.
+
+## Empezar
+
+Requiere Node.js 20 o superior.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrí [http://localhost:3000](http://localhost:3000). Los cambios se ven al guardar.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| Comando | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm start` | Sirve el build de producción |
+| `npm run lint` | ESLint |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> Esta versión de Next.js tiene cambios respecto de lo que se conoce de versiones anteriores. Ante la duda, la documentación oficial está en `node_modules/next/dist/docs/`.
 
-## Learn More
+## Estructura
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                  Rutas y metadata (layout, page, sitemap, robots, not-found, og image)
+├── components/
+│   ├── site/             Secciones del sitio (Header, Hero, HomeSections, Footer, WhatsAppButton)
+│   ├── actions/ display/ feedback/ forms/ icons/ navigation/   Sistema de componentes (Button, Badge, Tag, Tabs, etc.)
+│   └── shared/           Utilidades de componentes (Reveal, css)
+├── lib/whatsapp.js       Número de contacto y armado de links de WhatsApp
+└── styles/               Tokens de diseño (colores, tipografía, espaciado, movimiento) y estilos del sitio
+public/
+├── works/                Capturas de los proyectos de la sección Trabajos
+├── fonts/                Geist y Geist Mono (locales)
+└── logo-*.png, favicons, site.webmanifest
+scripts/capture-works.mjs Genera las capturas de los proyectos
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Las secciones de la home están en [src/components/site/HomeSections.jsx](src/components/site/HomeSections.jsx) y se ordenan en [src/app/page.jsx](src/app/page.jsx). Los componentes base tienen una guía de uso en el `.prompt.md` que está junto a cada uno.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contenido que se edita seguido
 
-## Deploy on Vercel
+**Número de WhatsApp.** Está en [src/lib/whatsapp.js](src/lib/whatsapp.js). Todos los botones de contacto lo usan.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Sección Trabajos.** Los proyectos son dos listas al principio del bloque `Work` de `HomeSections.jsx`:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `WORK_CLIENTS`: proyectos cerrados (se muestran a todo el ancho).
+- `WORK_DEMOS`: propuestas y demos (se muestran en tres columnas).
+
+Cada proyecto tiene título, problema, lo construido (`built`), lo que se puede sumar (`extra`), el mensaje de WhatsApp de su botón (`message`), sus links y la captura (`image`, `previewUrl`). En "Construido" se pone solo lo que la demo o el sistema hace hoy; lo demás va en "Se puede sumar".
+
+**Capturas de los proyectos.** Son archivos PNG en `public/works/` y se sirven como cualquier archivo estático: quedan en el repo y no hace falta regenerarlas en cada deploy. Para actualizar una, reemplazá el archivo conservando el nombre, o generala con:
+
+```bash
+node scripts/capture-works.mjs            # todas
+node scripts/capture-works.mjs liever     # solo una
+```
+
+El script usa Edge o Chrome sin ventana y guarda la captura de la parte de arriba de cada sitio a 1440×900. Nombres válidos: `goconcesionaria`, `liever`, `gastronomia`, `inmobiliaria`, `estetica`. Si falta una imagen, la card se muestra sin captura.
+
+## SEO y metadata
+
+El título, la descripción y Open Graph están en [src/app/layout.js](src/app/layout.js); el dominio base es `https://www.godreamai.com`. `sitemap.js`, `robots.js` y `opengraph-image.jsx` generan los archivos correspondientes. Si cambia el dominio, hay que actualizarlo en `layout.js` y `sitemap.js`.
+
+## Deploy
+
+Es un proyecto Next.js estándar: sirve cualquier plataforma que lo soporte, como Vercel. Antes de publicar conviene correr `npm run lint` y `npm run build`.
+
+Las variables de entorno (`.env*`) están en `.gitignore`. Hoy el sitio no necesita ninguna.
